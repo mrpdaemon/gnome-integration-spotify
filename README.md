@@ -13,7 +13,7 @@ Has been tested to work with Spotify 0.8.4.103.g9cb177b4
 
 ## Usage
 
-Instead of launching spotify directly launch spotify-dbus.py.
+Instead of launching `spotify` directly launch `spotify-dbus.py`.
 
 ## Credits
 
