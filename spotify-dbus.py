@@ -483,7 +483,7 @@ class Spotify:
 			os.system(spotify + ' > /dev/null 2>&1 &')
 			time.sleep(1);
 			
-			return commands.getoutput('pidof ' + spotify).strip()
+			return commands.getoutput('pidof spotify').strip()
 		else:
 			print 'Spotify cannot be found'
 			sys.exit()
