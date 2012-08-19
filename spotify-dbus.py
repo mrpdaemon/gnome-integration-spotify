@@ -487,7 +487,27 @@ class Spotify:
 		else:
 			print 'Spotify cannot be found'
 			sys.exit()
+
+	# Media keys
+	def install_mediakey_handler(self):
+		bus_object = self.bus.get_object(
+			'org.gnome.SettingsDaemon', '/org/gnome/SettingsDaemon/MediaKeys')
+		bus_object.GrabMediaPlayerKeys(
+			'Spotify', 0, dbus_interface='org.gnome.SettingsDaemon.MediaKeys')
+		bus_object.connect_to_signal(
+			'MediaPlayerKeyPressed', self.handle_mediakey)
 	
+	def handle_mediakey(self, *mmkeys):
+		for key in mmkeys:
+			if key == 'Play':
+				self.action_trigger('playpause')
+			elif key == 'Stop':
+				self.action_trigger('stop')
+			elif key == 'Next':
+				self.action_trigger('next')
+			elif key == 'Previous':
+				self.action_trigger('prev')
+
 	# init
 	def __init__(self):
 		# detects current locale
@@ -517,6 +537,9 @@ class Spotify:
 		
 		# Get player object
 		self.player = self.get_player()
+
+		# MediaKey handler
+		self.install_mediakey_handler()
 		
 		# Get notification object
 		proxy = bus.get_object('org.freedesktop.Notifications', '/org/freedesktop/Notifications')
