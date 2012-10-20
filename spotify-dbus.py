@@ -217,7 +217,7 @@ class Spotify:
 				print "Opening " + param + "..."
 	
 			window = self.get_window()
-			window.openLink(param)
+			window._openLink(param)
 	
 	# Action listener
 	def action_listener(self, id = 0, action = ''):
@@ -595,6 +595,10 @@ class Spotify:
 			except KeyboardInterrupt:
 				print 'Stopping daemon...'
 		
+		# Open URI
+		elif sys.argv[1][0:8] == 'spotify:':
+			self.action_trigger('uri', sys.argv[1])
+
 		# Info
 		elif '--info' in sys.argv or 'info' in sys.argv:
 			self.action_trigger('info')
@@ -638,10 +642,6 @@ class Spotify:
 		
 			else:
 				self.hide_window()
-		
-		# Open URI
-		elif sys.argv[1][0:8] == 'spotify:':
-			self.action_trigger('uri', sys.argv[1])
 		
 		# Other parameters, error
 		else:
