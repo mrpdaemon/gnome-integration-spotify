@@ -52,7 +52,7 @@ class Spotify:
 	size = '48x48'
 	loop = False
 	dloop = False
-	debug = True
+	debug = False
 	cache = os.environ['HOME'] + '/.cache/spotify/Covers/'
 	locale = 'en_US'
 	player = False
@@ -490,12 +490,16 @@ class Spotify:
 
 	# Media keys
 	def install_mediakey_handler(self):
-		bus_object = self.bus.get_object(
-			'org.gnome.SettingsDaemon', '/org/gnome/SettingsDaemon/MediaKeys')
-		bus_object.GrabMediaPlayerKeys(
-			'Spotify', 0, dbus_interface='org.gnome.SettingsDaemon.MediaKeys')
-		bus_object.connect_to_signal(
-			'MediaPlayerKeyPressed', self.handle_mediakey)
+        try:
+            bus_object = self.bus.get_object(
+                'org.gnome.SettingsDaemon', '/org/gnome/SettingsDaemon/MediaKeys')
+            bus_object.GrabMediaPlayerKeys(
+                'Spotify', 0, dbus_interface='org.gnome.SettingsDaemon.MediaKeys')
+            bus_object.connect_to_signal(
+                'MediaPlayerKeyPressed', self.handle_mediakey)
+        except dbus.DBusException:
+            if self.debug:
+                print("Failed to install media key handler (gnome settings daemon not available?)")
 	
 	def handle_mediakey(self, *mmkeys):
 		for key in mmkeys:
