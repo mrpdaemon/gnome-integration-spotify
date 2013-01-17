@@ -400,7 +400,7 @@ class Spotify:
 			# Generate cover URL
 			id = track['xesam:url'].split(':')
 			url = 'http://open.spotify.com/track/' + id[2]
-			output = commands.getoutput('curl -v ' + url + '| grep \'id="cover-art"\'')
+			output = commands.getoutput('curl -v ' + url + '| grep \'property="og:image"\'')
 			match = re.search('http(.+)image\/(\w+)', output)
 	
 			# Download the cover
