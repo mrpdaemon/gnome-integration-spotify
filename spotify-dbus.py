@@ -66,11 +66,18 @@ class Spotify:
 			'detail_by'			: 'por',
 			'detail_album'		: 'del disco',
 			'action_next'		: 'Siguiente',
-			'action_oause'		: 'Pausar',
+			'action_pause'		: 'Pausar',
 			'action_prev'		: 'Anterior',
 			'playback_paused'	: 'Reproducción pausada'
 		},
-		
+		'de_DE': {
+			'detail_by'			: 'von',
+			'detail_album'		: 'auf',
+			'action_next'		: 'Nächster',
+			'action_pause'		: 'Pause',
+			'action_prev'		: 'Vorheriger',
+			'playback_paused'	: 'Wiedergabe pausiert'
+		},
 		'en_US': {
 			'detail_by'			: 'by',
 			'detail_album'		: 'from',
