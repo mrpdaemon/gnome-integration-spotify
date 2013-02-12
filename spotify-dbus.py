@@ -410,12 +410,13 @@ class Spotify:
 			output = commands.getoutput('curl -v ' + url + '| grep \'property="og:image"\'')
 			match = re.search('http(.+)image\/(\w+)', output)
 	
-			# Download the cover
-			if self.debug == True:
-				print "Downloading cover " + url + "..."
-	
-			os.system('wget -q -O ' + path + ' ' + match.group(0))
-			os.system('convert -quiet -resize ' + self.size + ' ' + path + ' ' + path)
+			if match is not None:
+				# Download the cover
+				if self.debug == True:
+					print "Downloading cover " + url + "..."
+		
+				os.system('wget -q -O ' + path + ' ' + match.group(0))
+				os.system('convert -quiet -resize ' + self.size + ' ' + path + ' ' + path)
 	
 			# If download fails uses default Spotify icon
 			if not os.path.exists(path):
