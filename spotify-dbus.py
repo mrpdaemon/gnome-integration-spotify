@@ -41,7 +41,7 @@ import dbus
 import time
 import gobject
 import hashlib
-import commands
+import subprocess
 
 from dbus import Interface
 from dbus.mainloop.glib import DBusGMainLoop
@@ -269,7 +269,7 @@ class Spotify:
 	
 		# Check if Spotify is running
 		if self.pid and not track:
-			if int(commands.getoutput("ps ax | awk '{print $1}' | grep -c " + str(self.pid))) == 0:
+			if int(subprocess.getoutput("ps ax | awk '{print $1}' | grep -c " + str(self.pid))) == 0:
 				if self.debug == True:
 					print("Spotify not running, exiting...")
 	
@@ -356,10 +356,10 @@ class Spotify:
 			xwininfo = self.which('xwininfo')
 			
 			if wmctrl != False and xwininfo != False:
-				tray = commands.getoutput(wmctrl + ' -l -p | grep "lateral superior" | awk \'{print $1}\'')
-				sptfp = commands.getoutput(xwininfo + ' -id ' + tray + ' -tree | grep "spotify" | awk \'{print $6}\'')
-				sptfx = commands.getoutput('echo ' + sptfp + ' | awk -F "+" \'{print $2+=10}\'')
-				sptfy = commands.getoutput('echo ' + sptfp + ' | awk -F "+" \'{print $3+=13}\'')
+				tray = subprocess.getoutput(wmctrl + ' -l -p | grep "lateral superior" | awk \'{print $1}\'')
+				sptfp = subprocess.getoutput(xwininfo + ' -id ' + tray + ' -tree | grep "spotify" | awk \'{print $6}\'')
+				sptfx = subprocess.getoutput('echo ' + sptfp + ' | awk -F "+" \'{print $2+=10}\'')
+				sptfy = subprocess.getoutput('echo ' + sptfp + ' | awk -F "+" \'{print $3+=13}\'')
 			
 				tray_coords = { 'x': int(sptfx), 'y': int(sptfy) }
 	
@@ -371,8 +371,8 @@ class Spotify:
 		mouse_coords = { 'x': 0, 'y': 0 }
 		
 		if xdotool != False:
-			mousex = commands.getoutput("xdotool getmouselocation | awk '{print $1}' | sed -e 's/^x://'")
-			mousey = commands.getoutput("xdotool getmouselocation | awk '{print $2}' | sed -e 's/^y://'")
+			mousex = subprocess.getoutput("xdotool getmouselocation | awk '{print $1}' | sed -e 's/^x://'")
+			mousey = subprocess.getoutput("xdotool getmouselocation | awk '{print $2}' | sed -e 's/^y://'")
 			
 			mouse_coords = { 'x': int(mousex), 'y': int(mousey) }
 	
@@ -407,7 +407,7 @@ class Spotify:
 			# Generate cover URL
 			id = track['xesam:url'].split(':')
 			url = 'http://open.spotify.com/track/' + id[2]
-			output = commands.getoutput('curl -v ' + url + '| grep \'property="og:image"\'')
+			output = subprocess.getoutput('curl -v ' + url + '| grep \'property="og:image"\'')
 			match = re.search('http(.+)image\/(\w+)', output)
 	
 			if match is not None:
@@ -461,9 +461,9 @@ class Spotify:
 			if self.debug == True:
 				print("Hiding Spotify window...")
 	
-			commands.getoutput(xte + ' "mousemove ' + str(tray['x']) + ' ' + str(tray['y']) + '" "mousedown 3" "mouseup 3" && sleep 0.01')
-			commands.getoutput(xte + ' "mousemove ' + str(tray['x'] + 50) + ' ' + str(tray['y'] + 60) + '" "mousedown 1" "mouseup 1"')
-			commands.getoutput(xte + ' "mousemove ' + str(mouse['x']) + ' ' + str(mouse['y']) + '"')
+			subprocess.getoutput(xte + ' "mousemove ' + str(tray['x']) + ' ' + str(tray['y']) + '" "mousedown 3" "mouseup 3" && sleep 0.01')
+			subprocess.getoutput(xte + ' "mousemove ' + str(tray['x'] + 50) + ' ' + str(tray['y'] + 60) + '" "mousedown 1" "mouseup 1"')
+			subprocess.getoutput(xte + ' "mousemove ' + str(mouse['x']) + ' ' + str(mouse['y']) + '"')
 		elif self.debug == True:
 			print("Cound't hide Spotify window...")
 			
@@ -491,7 +491,7 @@ class Spotify:
 			os.system(spotify + ' > /dev/null 2>&1 &')
 			time.sleep(1);
 			
-			return commands.getoutput('pidof spotify').strip()
+			return subprocess.getoutput('pidof spotify').strip()
 		else:
 			print('Spotify cannot be found')
 			sys.exit()
@@ -523,7 +523,7 @@ class Spotify:
 	# init
 	def __init__(self):
 		# detects current locale
-		locale = commands.getoutput('locale | grep LANG')[5:10];
+		locale = subprocess.getoutput('locale | grep LANG')[5:10];
 		if locale in self.translations:
 			self.locale = locale
 		
@@ -572,7 +572,7 @@ class Spotify:
 				old_daemon_pid = open(self.pidfile).read().strip();
 				
 				running = 'ps ax | awk \'{print $1}\' | egrep -c "^' + old_daemon_pid + '$"'
-				running = int(commands.getoutput(running).strip())				
+				running = int(subprocess.getoutput(running).strip())
 				
 				if(running == 0):
 					if self.debug == True:
