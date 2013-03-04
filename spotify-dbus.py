@@ -39,7 +39,7 @@ import os
 import sys
 import dbus
 import time
-import gobject
+from gi.repository import GObject
 import hashlib
 import subprocess
 
@@ -142,8 +142,8 @@ class Spotify:
 					interface.connect_to_signal('ActionInvoked', self.action_listener)
 	
 				interface.connect_to_signal('NotificationClosed', self.action_dismisser)
-				gobject.threads_init()
-				gobject.timeout_add(self.timeout * 10, self.action_listener)
+				GObject.threads_init()
+				GObject.timeout_add(self.timeout * 10, self.action_listener)
 	
 		return self.nid
 		
@@ -528,7 +528,7 @@ class Spotify:
 			self.locale = locale
 		
 		# loop must be global to can quit from listener
-		self.loop = gobject.MainLoop()
+		self.loop = GObject.MainLoop()
 		
 		# Prepare loop for interactive notifications or daemon mode
 		self.dloop = DBusGMainLoop()
@@ -602,7 +602,7 @@ class Spotify:
 		
 			# Start loop listening for track changes
 			try:
-				gobject.timeout_add(100, self.change_listener)
+				GObject.timeout_add(100, self.change_listener)
 				self.loop.run()
 			except KeyboardInterrupt:
 				print('Stopping daemon...')
