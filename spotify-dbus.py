@@ -92,9 +92,9 @@ class Spotify:
 	def show_playing(self, track = False, interactive = True):
 		# Debug info
 		if self.debug == True and interactive == True:
-			print "Show track data interactively..."
+			print("Show track data interactively...")
 		elif self.debug == True:
-			print "Show track data..."
+			print("Show track data...")
 	
 		# Define actions in notification
 		if interactive == True:
@@ -129,7 +129,7 @@ class Spotify:
 			# Closes active notification
 			if self.nid != False:
 				if self.debug == True:
-					print "Closing existing notification..."
+					print("Closing existing notification...")
 				
 				interface.CloseNotification(self.nid)
 	
@@ -151,7 +151,7 @@ class Spotify:
 	def show_paused(self):
 		# Debug info
 		if self.debug == True:
-			print "Show paused..."
+			print("Show paused...")
 	
 		# Get Spotify tray icon coordinates
 		coords = self.get_tray_coords()
@@ -169,7 +169,7 @@ class Spotify:
 		# Closes active notification
 		if self.nid != False:
 			if self.debug == True:
-				print "Closing existing notification..."
+				print("Closing existing notification...")
 			
 			interface.CloseNotification(self.nid)
 	
@@ -185,14 +185,14 @@ class Spotify:
 		# Closes active notification
 		if self.nid != False:
 			if self.debug == True:
-				print "Closing existing notification..."
+				print("Closing existing notification...")
 			
 			interface.CloseNotification(self.nid)		
 		
 	# Execute an action
 	def action_trigger(self, action, param = False):
 		if self.debug == True:
-			print "Action '" + action + "' invoked..."
+			print("Action '" + action + "' invoked...")
 	
 		if action == 'info':
 			self.show_playing()
@@ -221,7 +221,7 @@ class Spotify:
 	
 		elif action == 'uri':
 			if self.debug == True:
-				print "Opening " + param + "..."
+				print("Opening " + param + "...")
 	
 			window = self.get_window()
 			window._openLink(param)
@@ -230,9 +230,9 @@ class Spotify:
 	def action_listener(self, id = 0, action = ''):
 		if id > 0 and id == self.nid:
 			if self.debug == True and action == 'default':
-				print "Notification closed by user..."
+				print("Notification closed by user...")
 			elif self.debug == True:
-				print "Listener received action '" + action + "', invoking action..."
+				print("Listener received action '" + action + "', invoking action...")
 	
 			if action == '0':
 				self.action_trigger('stop')
@@ -252,13 +252,13 @@ class Spotify:
 		if id > 0 and id == self.nid:
 			if self.debug == True:
 				if reason == 1:
-					print "Notification expired..."
+					print("Notification expired...")
 				elif reason == 2:
-					print "Notification dismissed..."
+					print("Notification dismissed...")
 				elif reason == 3:
-					print "Notification closed..."
+					print("Notification closed...")
 				else:
-					print "Notification closed unexpectedly..."
+					print("Notification closed unexpectedly...")
 	
 			self.nid = False
 	
@@ -271,7 +271,7 @@ class Spotify:
 		if self.pid and not track:
 			if int(commands.getoutput("ps ax | awk '{print $1}' | grep -c " + str(self.pid))) == 0:
 				if self.debug == True:
-					print "Spotify not running, exiting..."
+					print("Spotify not running, exiting...")
 	
 				os.system('rm -f ' + self.pidfile)
 				sys.exit()
@@ -280,7 +280,7 @@ class Spotify:
 		if not self.playing and track:
 			self.show_playing()
 			if self.debug == True:
-				print "Start playing..."
+				print("Start playing...")
 	
 		# Track info changed
 		elif self.playing and track != self.playing:
@@ -288,14 +288,14 @@ class Spotify:
 			if not track:
 				# show_paused()
 				if self.debug == True:
-					print "Track paused..."
+					print("Track paused...")
 			
 			# Changed
 			else:
 				self.show_playing()
 				if self.debug == True:
 					info = self.get_info(track, 'artist') + ' - ' + self.get_info(track, 'title')
-					print "Track changed to " + info + ", show info..."
+					print("Track changed to " + info + ", show info...")
 	
 		# Saves current playing song
 		self.playing = track;
@@ -387,15 +387,15 @@ class Spotify:
 		if not os.path.exists(self.cache):
 			os.system('mkdir "' + self.cache + '"')
 			if self.debug == True:
-				print "Created cache folder..."
+				print("Created cache folder...")
 		elif self.debug == True:
-			print "Cache folder already exists..."
+			print("Cache folder already exists...")
 	
 		# Generate title-based hash to store album cover
 		# base = get_info(track, 'artist') + ' - ' + get_info(track, 'album') + ' (' + str(track['year']) + ')'
 		base = self.get_info(track, 'artist') + ' - ' + self.get_info(track, 'album')
 		if self.debug == True:
-			print 'Generating album hash for "' + base + '"'
+			print('Generating album hash for "' + base + '"')
 	
 		h = hashlib.new('md5')
 		h.update(base + self.size)
@@ -413,7 +413,7 @@ class Spotify:
 			if match is not None:
 				# Download the cover
 				if self.debug == True:
-					print "Downloading cover " + url + "..."
+					print("Downloading cover " + url + "...")
 		
 				os.system('wget -q -O ' + path + ' ' + match.group(0))
 				os.system('convert -quiet -resize ' + self.size + ' ' + path + ' ' + path)
@@ -422,12 +422,12 @@ class Spotify:
 			if not os.path.exists(path):
 				path = '/usr/share/pixmaps/spotify.png'
 				if self.debug == True:
-					print "Download cover failed..."
+					print("Download cover failed...")
 			elif self.debug == True:
-				print "Download cover success..."
+				print("Download cover success...")
 	
 		elif self.debug == True:
-			print "Cover is already downloaded..."
+			print("Cover is already downloaded...")
 	
 		return path
 	
@@ -437,11 +437,11 @@ class Spotify:
 	
 		if player.CanRaise():
 			if self.debug == True:
-				print "Showing Spotify window..."
+				print("Showing Spotify window...")
 	
 			player.Raise()
 		elif self.debug == True:
-			print "Cound't show Spotify window..."
+			print("Cound't show Spotify window...")
 	
 	# Hides Spotify window
 	def hide_window(self):
@@ -459,13 +459,13 @@ class Spotify:
 	
 		if xte != False and tray['x'] > 0 and mouse['x'] > 0:
 			if self.debug == True:
-				print "Hiding Spotify window..."
+				print("Hiding Spotify window...")
 	
 			commands.getoutput(xte + ' "mousemove ' + str(tray['x']) + ' ' + str(tray['y']) + '" "mousedown 3" "mouseup 3" && sleep 0.01')
 			commands.getoutput(xte + ' "mousemove ' + str(tray['x'] + 50) + ' ' + str(tray['y'] + 60) + '" "mousedown 1" "mouseup 1"')
 			commands.getoutput(xte + ' "mousemove ' + str(mouse['x']) + ' ' + str(mouse['y']) + '"')
 		elif self.debug == True:
-			print "Cound't hide Spotify window..."
+			print("Cound't hide Spotify window...")
 			
 	# Translates a string
 	def translate(self, string):
@@ -493,7 +493,7 @@ class Spotify:
 			
 			return commands.getoutput('pidof spotify').strip()
 		else:
-			print 'Spotify cannot be found'
+			print('Spotify cannot be found')
 			sys.exit()
 
 	# Media keys
@@ -565,7 +565,7 @@ class Spotify:
 			# Check if daemon is running now
 			if not os.path.exists(self.pidfile):
 				if self.debug == True:
-					print 'Daemon not running, starting...'
+					print('Daemon not running, starting...')
 				
 				os.system('echo ' + daemon_pid + ' > ' + self.pidfile)
 			else:
@@ -576,20 +576,20 @@ class Spotify:
 				
 				if(running == 0):
 					if self.debug == True:
-						print 'Previous daemon exited unexpectly, starting...'
+						print('Previous daemon exited unexpectly, starting...')
 					
 					os.system('rm -f ' + self.pidfile)
 					os.system('echo ' + daemon_pid + ' > ' + self.pidfile)
 				else:
 					if self.debug == True:
-						print 'Daemon already running, exiting...'
+						print('Daemon already running, exiting...')
 					
 					sys.exit()
 			
 			# Launch Spotify and wait for it
 			if self.player == False:
 				if self.debug == True:
-					print 'Launching Spotify...'
+					print('Launching Spotify...')
 		
 				self.pid = self.launch()
 				time.sleep(3)
@@ -598,14 +598,14 @@ class Spotify:
 			os.system('touch /tmp/spotify-window.toggle')
 		
 			if self.debug == True:
-				print 'Launching daemon...'
+				print('Launching daemon...')
 		
 			# Start loop listening for track changes
 			try:
 				gobject.timeout_add(100, self.change_listener)
 				self.loop.run()
 			except KeyboardInterrupt:
-				print 'Stopping daemon...'
+				print('Stopping daemon...')
 		
 		# Open URI
 		elif sys.argv[1][0:8] == 'spotify:':
@@ -658,6 +658,6 @@ class Spotify:
 		# Other parameters, error
 		else:
 			if self.debug == True:
-				print "Unknown " + sys.argv[1] + " command..."
+				print("Unknown " + sys.argv[1] + " command...")
 
 s = Spotify()
