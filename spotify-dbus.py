@@ -41,7 +41,11 @@ import dbus
 import time
 from gi.repository import GObject
 import hashlib
-import subprocess
+import sys
+if (sys.version_info) < (3, 0):
+	import commands as cmd_output
+else:
+	import subprocess as cmd_output
 
 from dbus import Interface
 from dbus.mainloop.glib import DBusGMainLoop
@@ -269,7 +273,7 @@ class Spotify:
 	
 		# Check if Spotify is running
 		if self.pid and not track:
-			if int(subprocess.getoutput("ps ax | awk '{print $1}' | grep -c " + str(self.pid))) == 0:
+			if int(cmd_output.getoutput("ps ax | awk '{print $1}' | grep -c " + str(self.pid))) == 0:
 				if self.debug == True:
 					print("Spotify not running, exiting...")
 	
@@ -356,10 +360,10 @@ class Spotify:
 			xwininfo = self.which('xwininfo')
 			
 			if wmctrl != False and xwininfo != False:
-				tray = subprocess.getoutput(wmctrl + ' -l -p | grep "lateral superior" | awk \'{print $1}\'')
-				sptfp = subprocess.getoutput(xwininfo + ' -id ' + tray + ' -tree | grep "spotify" | awk \'{print $6}\'')
-				sptfx = subprocess.getoutput('echo ' + sptfp + ' | awk -F "+" \'{print $2+=10}\'')
-				sptfy = subprocess.getoutput('echo ' + sptfp + ' | awk -F "+" \'{print $3+=13}\'')
+				tray = cmd_output.getoutput(wmctrl + ' -l -p | grep "lateral superior" | awk \'{print $1}\'')
+				sptfp = cmd_output.getoutput(xwininfo + ' -id ' + tray + ' -tree | grep "spotify" | awk \'{print $6}\'')
+				sptfx = cmd_output.getoutput('echo ' + sptfp + ' | awk -F "+" \'{print $2+=10}\'')
+				sptfy = cmd_output.getoutput('echo ' + sptfp + ' | awk -F "+" \'{print $3+=13}\'')
 			
 				tray_coords = { 'x': int(sptfx), 'y': int(sptfy) }
 	
@@ -371,8 +375,8 @@ class Spotify:
 		mouse_coords = { 'x': 0, 'y': 0 }
 		
 		if xdotool != False:
-			mousex = subprocess.getoutput("xdotool getmouselocation | awk '{print $1}' | sed -e 's/^x://'")
-			mousey = subprocess.getoutput("xdotool getmouselocation | awk '{print $2}' | sed -e 's/^y://'")
+			mousex = cmd_output.getoutput("xdotool getmouselocation | awk '{print $1}' | sed -e 's/^x://'")
+			mousey = cmd_output.getoutput("xdotool getmouselocation | awk '{print $2}' | sed -e 's/^y://'")
 			
 			mouse_coords = { 'x': int(mousex), 'y': int(mousey) }
 	
@@ -407,7 +411,7 @@ class Spotify:
 			# Generate cover URL
 			id = track['xesam:url'].split(':')
 			url = 'http://open.spotify.com/track/' + id[2]
-			output = subprocess.getoutput('curl -v ' + url + '| grep \'property="og:image"\'')
+			output = cmd_output.getoutput('curl -v ' + url + '| grep \'property="og:image"\'')
 			match = re.search('http(.+)image\/(\w+)', output)
 	
 			if match is not None:
@@ -461,9 +465,9 @@ class Spotify:
 			if self.debug == True:
 				print("Hiding Spotify window...")
 	
-			subprocess.getoutput(xte + ' "mousemove ' + str(tray['x']) + ' ' + str(tray['y']) + '" "mousedown 3" "mouseup 3" && sleep 0.01')
-			subprocess.getoutput(xte + ' "mousemove ' + str(tray['x'] + 50) + ' ' + str(tray['y'] + 60) + '" "mousedown 1" "mouseup 1"')
-			subprocess.getoutput(xte + ' "mousemove ' + str(mouse['x']) + ' ' + str(mouse['y']) + '"')
+			cmd_output.getoutput(xte + ' "mousemove ' + str(tray['x']) + ' ' + str(tray['y']) + '" "mousedown 3" "mouseup 3" && sleep 0.01')
+			cmd_output.getoutput(xte + ' "mousemove ' + str(tray['x'] + 50) + ' ' + str(tray['y'] + 60) + '" "mousedown 1" "mouseup 1"')
+			cmd_output.getoutput(xte + ' "mousemove ' + str(mouse['x']) + ' ' + str(mouse['y']) + '"')
 		elif self.debug == True:
 			print("Cound't hide Spotify window...")
 			
@@ -491,7 +495,7 @@ class Spotify:
 			os.system(spotify + ' > /dev/null 2>&1 &')
 			time.sleep(1);
 			
-			return subprocess.getoutput('pidof spotify').strip()
+			return cmd_output.getoutput('pidof spotify').strip()
 		else:
 			print('Spotify cannot be found')
 			sys.exit()
@@ -523,7 +527,7 @@ class Spotify:
 	# init
 	def __init__(self):
 		# detects current locale
-		locale = subprocess.getoutput('locale | grep LANG')[5:10];
+		locale = cmd_output.getoutput('locale | grep LANG')[5:10];
 		if locale in self.translations:
 			self.locale = locale
 		
@@ -572,7 +576,7 @@ class Spotify:
 				old_daemon_pid = open(self.pidfile).read().strip();
 				
 				running = 'ps ax | awk \'{print $1}\' | egrep -c "^' + old_daemon_pid + '$"'
-				running = int(subprocess.getoutput(running).strip())
+				running = int(cmd_output.getoutput(running).strip())
 				
 				if(running == 0):
 					if self.debug == True:
