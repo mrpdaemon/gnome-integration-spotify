@@ -118,8 +118,8 @@ class Spotify:
 				hints = {}
 	
 			# Generate notification content
-			text = self.translate('detail_by') + ' <i>' + self.get_info(track, 'artist')
-			text = text + '</i> ' + self.translate('detail_album') + ' <i>' + self.get_info(track, 'album') + '</i>'
+			text = self.translate('detail_by') + ' <i>' + str(self.get_info(track, 'artist'))
+			text = text + '</i> ' + self.translate('detail_album') + ' <i>' + str(self.get_info(track, 'album')) + '</i>'
 			text = text.replace('&', '&amp;')
 	
 			# Get interface for call notification daemon
@@ -393,7 +393,7 @@ class Spotify:
 	
 		# Generate title-based hash to store album cover
 		# base = get_info(track, 'artist') + ' - ' + get_info(track, 'album') + ' (' + str(track['year']) + ')'
-		base = self.get_info(track, 'artist') + ' - ' + self.get_info(track, 'album')
+		base = str(self.get_info(track, 'artist')) + ' - ' + str(self.get_info(track, 'album'))
 		if self.debug == True:
 			print('Generating album hash for "' + base + '"')
 	
