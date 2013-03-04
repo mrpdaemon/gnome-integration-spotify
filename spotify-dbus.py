@@ -398,7 +398,7 @@ class Spotify:
 			print('Generating album hash for "' + base + '"')
 	
 		h = hashlib.new('md5')
-		h.update(base + self.size)
+		h.update((base + self.size).encode('utf-8'))
 		hash = h.hexdigest()
 	
 		# Check if cover is already downloaded
