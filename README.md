@@ -10,7 +10,7 @@ the following features are supported:
 * DBUS integration (Media Player Indicator gnome-shell extension displays what Spotify is playing)
 * Launch spotify:// URL's (playlists etc.) from other applications such as a browser.
 
-Has been tested to work with Spotify 0.9.1.55
+Has been tested to work with Spotify 0.9.4.183
 
 ## Usage
 
