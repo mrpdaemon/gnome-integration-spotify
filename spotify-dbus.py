@@ -273,7 +273,7 @@ class Spotify:
 	
 		# Check if Spotify is running
 		if self.pid and not track:
-			if int(cmd_output.getoutput("ps ax | awk '{print $1}' | grep -c " + str(self.pid))) == 0:
+			if int(cmd_output.getoutput("ps ax | awk '{print $1}' | grep -c " + str(self.pid).split()[0])) == 0:
 				if self.debug == True:
 					print("Spotify not running, exiting...")
 	
